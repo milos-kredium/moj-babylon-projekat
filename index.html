@@ -8,12 +8,14 @@
 <body>
     <canvas id="renderCanvas"></canvas>
 
+    <button id="open-sidebar-btn" class="glass-panel">☰ Filters</button>
+
     <div class="top-logo">Skyline Builders</div>
 
     <div id="filter-sidebar" class="glass-panel">
         <div class="sidebar-header">
             <span>Residence</span>
-            <span class="close-icon">✕</span>
+            <span id="close-sidebar-x" class="close-icon">✕</span>
         </div>
         
         <div class="filter-group">
@@ -44,12 +46,12 @@
             <input type="range" class="slider">
         </div>
 
-        <button class="reset-btn">Reset all filters</button>
+        <button class="reset-btn" id="reset-all">Reset all filters</button>
     </div>
 
     <div class="side-controls">
-        <button class="zoom-btn">+</button>
-        <button class="zoom-btn">-</button>
+        <button class="zoom-btn" id="zoom-in">+</button>
+        <button class="zoom-btn" id="zoom-out">-</button>
     </div>
 
     <div class="bottom-toolbar">
@@ -57,9 +59,8 @@
         <button class="tool-btn">Videos ▾</button>
         <button class="tool-btn">Amenities ▾</button>
         <button class="tool-btn">360 View ▾</button>
+        <button class="tool-btn" id="night-mode">🌙</button>
     </div>
-
-    <div id="info-card"></div>
 
     <script type="module" src="/src/main.js"></script>
 </body>
