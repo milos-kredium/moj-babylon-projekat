@@ -9,8 +9,14 @@
 <body>
     <canvas id="renderCanvas"></canvas>
 
-    <button id="open-sidebar-btn" class="glass-panel">☰ Filters</button>
+    <div id="apartment-card" class="glass-panel" style="display: none; position: absolute; z-index: 1000; pointer-events: none; padding: 15px; border-radius: 10px; width: 200px;">
+        <h3 id="card-title" style="margin: 0 0 10px 0; color: #8bc34a;">Apartment 101</h3>
+        <p style="margin: 5px 0; font-size: 14px;">Price: <span id="card-price">€120,000</span></p>
+        <p style="margin: 5px 0; font-size: 14px;">Area: <span id="card-area">65 m²</span></p>
+        <p style="margin: 5px 0; font-size: 12px; color: #aaa;">Click for details</p>
+    </div>
 
+    <button id="open-sidebar-btn" class="glass-panel">☰ Filters</button>
     <div class="top-logo">Skyline Builders</div>
 
     <div id="filter-sidebar" class="glass-panel">
@@ -27,14 +33,8 @@
 
         <div class="filter-section">
             <label>Height</label>
-            <div class="toggle-row">
-                <span>Duplex</span>
-                <input type="checkbox" class="toggle">
-            </div>
-            <div class="toggle-row">
-                <span>Triplex</span>
-                <input type="checkbox" class="toggle">
-            </div>
+            <div class="toggle-row"><span>Duplex</span><input type="checkbox" class="toggle"></div>
+            <div class="toggle-row"><span>Triplex</span><input type="checkbox" class="toggle"></div>
         </div>
 
         <div class="filter-section">
