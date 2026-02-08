@@ -9,58 +9,38 @@
 <body>
     <canvas id="renderCanvas"></canvas>
 
-    <div id="apartment-card" class="glass-panel" style="display: none; position: absolute; z-index: 1000; pointer-events: none; padding: 15px; border-radius: 10px; width: 200px;">
-        <h3 id="card-title" style="margin: 0 0 10px 0; color: #8bc34a;">Apartment 101</h3>
-        <p style="margin: 5px 0; font-size: 14px;">Price: <span id="card-price">€120,000</span></p>
-        <p style="margin: 5px 0; font-size: 14px;">Area: <span id="card-area">65 m²</span></p>
-        <p style="margin: 5px 0; font-size: 12px; color: #aaa;">Click for details</p>
+    <div id="apartment-card" class="glass-panel">
+        <h3 id="card-title">Stan 101</h3>
+        <p>Cena: <span id="card-price">€120,000</span></p>
+        <p>Površina: <span id="card-area">65 m²</span></p>
     </div>
 
-    <button id="open-sidebar-btn" class="glass-panel">☰ Filters</button>
+    <button id="open-sidebar-btn" class="glass-panel">☰ Filteri</button>
     <div class="top-logo">Skyline Builders</div>
 
     <div id="filter-sidebar" class="glass-panel">
         <div class="sidebar-header">
-            <span>Residence</span>
+            <span>Rezidencija</span>
             <span id="close-sidebar-x" class="close-icon">✕</span>
         </div>
         
         <div class="filter-group">
             <button class="filter-btn">Studio</button>
-            <button class="filter-btn active">1 Bedroom</button>
-            <button class="filter-btn">2 Bedroom</button>
+            <button class="filter-btn active">1 Spavaća</button>
+            <button class="filter-btn">2 Spavaće</button>
         </div>
 
         <div class="filter-section">
-            <label>Height</label>
-            <div class="toggle-row"><span>Duplex</span><input type="checkbox" class="toggle"></div>
-            <div class="toggle-row"><span>Triplex</span><input type="checkbox" class="toggle"></div>
-        </div>
-
-        <div class="filter-section">
-            <label>Price (€) <span>53.000 - 120.400</span></label>
-            <input type="range" class="slider">
-        </div>
-
-        <div class="filter-section">
-            <label>Floor range <span>1 - 14</span></label>
+            <label>Spratnost <span>1 - 14</span></label>
             <input type="range" class="slider" id="floor-slider" min="1" max="14" value="14">
         </div>
 
-        <button class="reset-btn" id="reset-all">Reset all filters</button>
+        <button class="reset-btn" id="reset-all">Resetuj sve</button>
     </div>
 
     <div class="side-controls">
         <button class="zoom-btn" id="zoom-in">+</button>
         <button class="zoom-btn" id="zoom-out">-</button>
-    </div>
-
-    <div class="bottom-toolbar">
-        <button class="tool-btn">South</button>
-        <button class="tool-btn">Videos ▾</button>
-        <button class="tool-btn">Amenities ▾</button>
-        <button class="tool-btn">360 View ▾</button>
-        <button class="tool-btn" id="night-mode">🌙</button>
     </div>
 
     <script type="module" src="/src/main.js"></script>
