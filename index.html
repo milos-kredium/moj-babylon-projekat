@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Skyline Builders - 3D Navigator</title>
+    <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
     <canvas id="renderCanvas"></canvas>
@@ -43,7 +44,7 @@
 
         <div class="filter-section">
             <label>Floor range <span>1 - 14</span></label>
-            <input type="range" class="slider">
+            <input type="range" class="slider" id="floor-slider" min="1" max="14" value="14">
         </div>
 
         <button class="reset-btn" id="reset-all">Reset all filters</button>
