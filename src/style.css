@@ -2,7 +2,7 @@ html, body {
   overflow: hidden;
   width: 100%; height: 100%;
   margin: 0; padding: 0;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   background-color: #050505;
 }
 
@@ -13,7 +13,7 @@ html, body {
 }
 
 .glass-panel {
-  background: rgba(25, 25, 25, 0.7);
+  background: rgba(25, 25, 25, 0.75);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -22,17 +22,10 @@ html, body {
 }
 
 #apartment-card {
-  display: none;
-  position: absolute;
-  z-index: 1000;
-  pointer-events: none;
-  padding: 15px;
-  border-radius: 12px;
-  width: 180px;
+  display: none; position: absolute;
+  z-index: 1000; pointer-events: none;
+  padding: 15px; border-radius: 12px; width: 180px;
 }
-
-#apartment-card h3 { margin: 0 0 8px 0; color: #8bc34a; font-size: 16px; }
-#apartment-card p { margin: 4px 0; font-size: 13px; color: #ddd; }
 
 .top-logo {
   position: absolute; top: 20px; left: 20px;
@@ -44,7 +37,7 @@ html, body {
 #filter-sidebar {
   position: absolute; top: 80px; left: 20px;
   width: 260px; padding: 20px; border-radius: 15px;
-  z-index: 200; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+  z-index: 200; transition: transform 0.4s ease, opacity 0.3s;
 }
 
 .sidebar-hidden { transform: translateX(-350px); opacity: 0; pointer-events: none; }
@@ -55,31 +48,19 @@ html, body {
   border-radius: 8px; cursor: pointer; font-weight: bold; z-index: 150;
 }
 
-.sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-weight: 600; }
-.close-icon { cursor: pointer; font-size: 18px; color: #888; transition: 0.2s; }
-.close-icon:hover { color: white; }
+.sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.close-icon { cursor: pointer; font-size: 20px; }
 
+.filter-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
 .filter-btn {
   background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-  color: white; padding: 12px; border-radius: 8px; margin-bottom: 8px;
-  width: 100%; text-align: left; cursor: pointer;
+  color: white; padding: 10px; border-radius: 6px; cursor: pointer; text-align: left;
 }
-.filter-btn.active { background: #6e9e2d; border-color: #8bc34a; }
+.filter-btn.active { background: #6e9e2d; }
 
-.slider { width: 100%; accent-color: #6e9e2d; cursor: pointer; margin-top: 10px; }
+.toggle-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; color: #ccc; }
+.slider { width: 100%; accent-color: #6e9e2d; cursor: pointer; }
+.reset-btn { width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: none; color: white; border-radius: 6px; cursor: pointer; margin-top: 10px; }
 
-.side-controls {
-  position: absolute; right: 20px; top: 50%;
-  transform: translateY(-50%); display: flex;
-  flex-direction: column; gap: 10px; z-index: 100;
-}
-.zoom-btn {
-  width: 45px; height: 45px; background: rgba(30, 30, 30, 0.8);
-  color: white; border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px; cursor: pointer; font-size: 20px;
-}
-.reset-btn {
-  width: 100%; padding: 10px; margin-top: 15px;
-  background: rgba(255,255,255,0.1); border: none;
-  color: white; border-radius: 6px; cursor: pointer;
-}
+.side-controls { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 100; }
+.zoom-btn { width: 45px; height: 45px; background: rgba(30, 30, 30, 0.8); color: white; border-radius: 8px; cursor: pointer; font-size: 20px; border: 1px solid rgba(255,255,255,0.1); }

@@ -1,4 +1,4 @@
-import { Engine, Scene, ArcRotateCamera, Vector3, HemisphericLight, SceneLoader, Color3 } from "@babylonjs/core";
+import { Engine, Scene, ArcRotateCamera, Vector3, HemisphericLight, SceneLoader, Color3, StandardMaterial } from "@babylonjs/core";
 import "@babylonjs/loaders";
 
 const canvas = document.getElementById("renderCanvas");
@@ -8,40 +8,40 @@ const createScene = () => {
     const scene = new Scene(engine);
     scene.clearColor = new Color3(0.02, 0.02, 0.02);
 
-    const camera = new ArcRotateCamera("camera", Math.PI / 4, Math.PI / 3, 45, Vector3.Zero(), scene);
+    // KAMERA - Podešena da ne ide ispod zemlje i da zumira blizu
+    const camera = new ArcRotateCamera("camera", Math.PI / 4, Math.PI / 3, 30, Vector3.Zero(), scene);
     camera.attachControl(canvas, true);
-    camera.lowerRadiusLimit = 15;
-    camera.upperRadiusLimit = 100;
+    
+    camera.lowerRadiusLimit = 5;      // Koliko blizu možeš prići (baš blizu!)
+    camera.upperRadiusLimit = 80;     // Maksimalno udaljavanje
+    camera.upperBetaLimit = Math.PI / 2.1; // Blokira kameru da ne ide ispod zgrade
 
     const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
-    light.intensity = 0.8;
+    light.intensity = 0.9;
 
     const apartmentCard = document.getElementById("apartment-card");
     let highlightedMesh = null;
+    let originalMaterials = new Map();
 
-    // UCITAVANJE MODELA (Ulica i Zgrada)
-    Promise.all([
-        SceneLoader.ImportMeshAsync("", "/", "ulica.glb", scene).catch(() => null),
-        SceneLoader.ImportMeshAsync("", "/", "zgrada.glb", scene)
-    ]).then((results) => {
-        // Ulica - isključujemo hover da ne smeta zgradi
-        if(results[0]) {
-            results[0].meshes.forEach(m => {
-                m.isPickable = false; 
-                m.position.y = -0.05;
-            });
-        }
-        // Zgrada
-        if(results[1]) {
-            results[1].meshes.forEach(m => {
-                m.isPickable = true;
-                m.checkCollisions = true;
-            });
-        }
-        console.log("3D Scena spremna.");
+    // Materijal za zeleni transparentni hover
+    const hoverMaterial = new StandardMaterial("hoverMat", scene);
+    hoverMaterial.diffuseColor = new Color3(0.4, 1, 0.2);
+    hoverMaterial.alpha = 0.5; // Prozirnost (0.5 je 50%)
+    hoverMaterial.emissiveColor = new Color3(0.2, 0.5, 0.1);
+
+    // UCITAVANJE SAMO ZGRADE
+    SceneLoader.ImportMeshAsync("", "/", "zgrada.glb", scene).then((result) => {
+        result.meshes.forEach(m => {
+            m.isPickable = true;
+            // Čuvamo originalne materijale za svaki deo
+            if (m.material) {
+                originalMaterials.set(m, m.material);
+            }
+        });
+        console.log("Zgrada ucitana bez ulice.");
     });
 
-    // ZELENI HOVER EFEKAT I KARTICA
+    // HOVER LOGIKA SA TRANSPARENTNIM MATERIJALOM
     scene.onPointerMove = (evt) => {
         const pickResult = scene.pick(scene.pointerX, scene.pointerY);
         
@@ -49,21 +49,30 @@ const createScene = () => {
             const mesh = pickResult.pickedMesh;
             
             if (highlightedMesh !== mesh) {
-                if (highlightedMesh) highlightedMesh.renderOutline = false;
+                // Vrati prethodni materijal
+                if (highlightedMesh) {
+                    highlightedMesh.material = originalMaterials.get(highlightedMesh);
+                    highlightedMesh.renderOutline = false;
+                }
                 
                 highlightedMesh = mesh;
+                
+                // Primeni zeleni transparentni hover
+                mesh.material = hoverMaterial;
                 mesh.renderOutline = true;
-                mesh.outlineColor = new Color3(0.4, 1, 0); // Zelena boja
-                mesh.outlineWidth = 0.08;
+                mesh.outlineColor = new Color3(0.4, 1, 0);
+                mesh.outlineWidth = 0.05;
 
-                // Pozicioniranje i prikaz kartice
                 apartmentCard.style.display = "block";
                 apartmentCard.style.left = (scene.pointerX + 15) + "px";
                 apartmentCard.style.top = (scene.pointerY + 15) + "px";
                 document.getElementById("card-title").innerText = mesh.name;
             }
         } else {
-            if (highlightedMesh) highlightedMesh.renderOutline = false;
+            if (highlightedMesh) {
+                highlightedMesh.material = originalMaterials.get(highlightedMesh);
+                highlightedMesh.renderOutline = false;
+            }
             highlightedMesh = null;
             apartmentCard.style.display = "none";
         }
@@ -77,10 +86,9 @@ const createScene = () => {
     closeBtn.onclick = () => { sidebar.classList.add('sidebar-hidden'); openBtn.style.display = 'block'; };
     openBtn.onclick = () => { sidebar.classList.remove('sidebar-hidden'); openBtn.style.display = 'none'; };
 
-    // ZOOM
-    document.getElementById('zoom-in').onclick = () => camera.radius -= 5;
-    document.getElementById('zoom-out').onclick = () => camera.radius += 5;
-    document.getElementById('reset-all').onclick = () => { camera.radius = 45; camera.setTarget(Vector3.Zero()); };
+    document.getElementById('zoom-in').onclick = () => camera.radius -= 3;
+    document.getElementById('zoom-out').onclick = () => camera.radius += 3;
+    document.getElementById('reset-all').onclick = () => { camera.radius = 30; camera.setTarget(Vector3.Zero()); };
 
     return scene;
 };
