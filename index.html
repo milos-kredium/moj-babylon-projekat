@@ -10,9 +10,11 @@
     <canvas id="renderCanvas"></canvas>
 
     <div id="apartment-card" class="glass-panel">
+        <span id="close-card-x" style="position: absolute; top: 8px; right: 12px; cursor: pointer; color: #888; font-size: 16px;">✕</span>
         <h3 id="card-title">Stan 101</h3>
         <p>Cena: <span id="card-price">€120,000</span></p>
         <p>Površina: <span id="card-area">65 m²</span></p>
+        <button style="width: 100%; margin-top: 10px; padding: 8px; background: #6e9e2d; border: none; color: white; border-radius: 4px; cursor: pointer;">Detaljnije</button>
     </div>
 
     <button id="open-sidebar-btn" class="glass-panel">☰ Filteri</button>
@@ -32,14 +34,8 @@
 
         <div class="filter-section">
             <label>Tip stana</label>
-            <div class="toggle-row">
-                <span>Duplex</span>
-                <input type="checkbox">
-            </div>
-            <div class="toggle-row">
-                <span>Triplex</span>
-                <input type="checkbox">
-            </div>
+            <div class="toggle-row"><span>Duplex</span><input type="checkbox"></div>
+            <div class="toggle-row"><span>Triplex</span><input type="checkbox"></div>
         </div>
 
         <div class="filter-section">

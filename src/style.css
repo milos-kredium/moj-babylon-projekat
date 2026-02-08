@@ -13,7 +13,7 @@ html, body {
 }
 
 .glass-panel {
-  background: rgba(25, 25, 25, 0.75);
+  background: rgba(25, 25, 25, 0.85);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -22,10 +22,17 @@ html, body {
 }
 
 #apartment-card {
-  display: none; position: absolute;
-  z-index: 1000; pointer-events: none;
-  padding: 15px; border-radius: 12px; width: 180px;
+  display: none; 
+  position: absolute;
+  z-index: 1000; 
+  padding: 20px 15px 15px 15px; 
+  border-radius: 12px; 
+  width: 200px;
+  pointer-events: auto; /* Dozvoljava klikove na dugme i X */
 }
+
+#apartment-card h3 { margin: 0 0 8px 0; color: #8bc34a; font-size: 18px; }
+#apartment-card p { margin: 4px 0; font-size: 14px; color: #ddd; }
 
 .top-logo {
   position: absolute; top: 20px; left: 20px;
