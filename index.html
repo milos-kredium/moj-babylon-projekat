@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skyline Builders - 3D Navigator</title>
+</head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+
+    <div class="top-logo">Skyline Builders</div>
+
+    <div id="filter-sidebar" class="glass-panel">
+        <div class="sidebar-header">
+            <span>Residence</span>
+            <span class="close-icon">✕</span>
+        </div>
+        
+        <div class="filter-group">
+            <button class="filter-btn">Studio</button>
+            <button class="filter-btn active">1 Bedroom</button>
+            <button class="filter-btn">2 Bedroom</button>
+        </div>
+
+        <div class="filter-section">
+            <label>Height</label>
+            <div class="toggle-row">
+                <span>Duplex</span>
+                <input type="checkbox" class="toggle">
+            </div>
+            <div class="toggle-row">
+                <span>Triplex</span>
+                <input type="checkbox" class="toggle">
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <label>Price (€) <span>53.000 - 120.400</span></label>
+            <input type="range" class="slider">
+        </div>
+
+        <div class="filter-section">
+            <label>Floor range <span>1 - 14</span></label>
+            <input type="range" class="slider">
+        </div>
+
+        <button class="reset-btn">Reset all filters</button>
+    </div>
+
+    <div class="side-controls">
+        <button class="zoom-btn">+</button>
+        <button class="zoom-btn">-</button>
+    </div>
+
+    <div class="bottom-toolbar">
+        <button class="tool-btn">South</button>
+        <button class="tool-btn">Videos ▾</button>
+        <button class="tool-btn">Amenities ▾</button>
+        <button class="tool-btn">360 View ▾</button>
+    </div>
+
+    <div id="info-card"></div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
