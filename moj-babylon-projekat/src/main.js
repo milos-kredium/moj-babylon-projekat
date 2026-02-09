@@ -18,7 +18,7 @@ const createScene = () => {
     const scene = new Scene(engine);
     scene.clearColor = new Color3(0.02, 0.02, 0.02);
 
-    // 1. KONFIGURACIJA DRACO DEKODERA (Ključno za tvoj kompresovani model)
+    // 1. DRACO DEKODER (OBAVEZNO: Omogućava čitanje kompresovanog modela)
     DracoCompression.Configuration = {
         decoder: {
             wasmUrl: "https://preview.babylonjs.com/draco_wasm_wrapper.js",
@@ -26,39 +26,36 @@ const createScene = () => {
         }
     };
 
-    // 2. KAMERA I SVETLO
-    const camera = new ArcRotateCamera("camera", Math.PI / 4, Math.PI / 3, 40, Vector3.Zero(), scene);
+    // 2. KAMERA (Podešena da se okreće oko zgrade)
+    const camera = new ArcRotateCamera("camera", Math.PI / 4, Math.PI / 3, 50, Vector3.Zero(), scene);
     camera.attachControl(canvas, true);
     camera.lowerRadiusLimit = 10;
-    camera.upperRadiusLimit = 100;
-    camera.upperBetaLimit = Math.PI / 2.1; // Sprečava kameru da ide ispod poda
+    camera.upperRadiusLimit = 150;
+    camera.upperBetaLimit = Math.PI / 2.1; // Ne dozvoljava kameri da ide "ispod zemlje"
 
     const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
-    light.intensity = 0.8;
+    light.intensity = 0.81; // Mala promena da bi Git registrovao novi commit
 
-    // 3. UI ELEMENTI
+    // 3. UI ELEMENTI (Kartica za stanove)
     const apartmentCard = document.getElementById("apartment-card");
     const closeCardBtn = document.getElementById("close-card-x");
     let highlightedMesh = null;
     let isCardLocked = false;
     let originalMaterials = new Map();
 
-    // Materijal za hover efekat (zeleni prozirni sloj)
+    // Materijal za hover efekat
     const hoverMaterial = new StandardMaterial("hoverMat", scene);
     hoverMaterial.diffuseColor = new Color3(0.4, 1, 0.2);
     hoverMaterial.alpha = 0.4;
-    hoverMaterial.emissiveColor = new Color3(0.2, 0.5, 0.1);
 
-    // 4. UČITAVANJE MODELA
-    // Putanja "/" znači da traži zgrada.glb unutar public foldera
+    // 4. UČITAVANJE MODELA (Pazi da se fajl zove zgrada.glb u public folderu)
     SceneLoader.ImportMeshAsync("", "/", "zgrada.glb", scene, (event) => {
-        // Logika za učitavanje (opciono: možeš dodati vizuelni loading bar ovde)
         if (event.lengthComputable) {
             let percentage = ((event.loaded * 100) / event.total).toFixed(0);
-            console.log("Učitavanje: " + percentage + "%");
+            console.log(`Učitavanje modela: ${percentage}%`);
         }
     }).then((result) => {
-        console.log("Model uspešno učitan!");
+        console.log("Zgrada je uspešno učitana!");
         result.meshes.forEach(m => {
             m.isPickable = true;
             if (m.material) {
@@ -66,10 +63,10 @@ const createScene = () => {
             }
         });
     }).catch(err => {
-        console.error("Greška pri učitavanju modela: ", err);
+        console.error("Greška pri učitavanju:", err);
     });
 
-    // 5. INTERAKCIJA (HOVER & KLIK)
+    // 5. INTERAKCIJA
     const clearHighlight = () => {
         if (highlightedMesh) {
             highlightedMesh.material = originalMaterials.get(highlightedMesh);
@@ -78,10 +75,8 @@ const createScene = () => {
         highlightedMesh = null;
     };
 
-    // Pomeranje miša (Hover)
     scene.onPointerMove = () => {
-        if (isCardLocked) return; // Ako je kartica "zaključana" klikom, hover ne radi ništa
-
+        if (isCardLocked) return;
         const pickResult = scene.pick(scene.pointerX, scene.pointerY);
         if (pickResult.hit && pickResult.pickedMesh) {
             const mesh = pickResult.pickedMesh;
@@ -91,8 +86,7 @@ const createScene = () => {
                 mesh.material = hoverMaterial;
                 mesh.renderOutline = true;
                 mesh.outlineColor = new Color3(0.4, 1, 0);
-                mesh.outlineWidth = 0.05;
-
+                
                 apartmentCard.style.display = "block";
                 apartmentCard.style.left = (scene.pointerX + 15) + "px";
                 apartmentCard.style.top = (scene.pointerY + 15) + "px";
@@ -104,30 +98,17 @@ const createScene = () => {
         }
     };
 
-    // Klik na objekat
-    scene.onPointerDown = (evt) => {
+    scene.onPointerDown = () => {
         const pickResult = scene.pick(scene.pointerX, scene.pointerY);
         if (pickResult.hit && pickResult.pickedMesh) {
-            isCardLocked = true; // "Zaključavamo" karticu na ekranu
-            const mesh = pickResult.pickedMesh;
-            
-            clearHighlight();
-            highlightedMesh = mesh;
-            mesh.material = hoverMaterial;
-            mesh.renderOutline = true;
-
-            apartmentCard.style.display = "block";
-            // Pozicija kartice ostaje fiksna na mestu klika
-            apartmentCard.style.left = (scene.pointerX + 15) + "px";
-            apartmentCard.style.top = (scene.pointerY + 15) + "px";
-            document.getElementById("card-title").innerText = mesh.name;
+            isCardLocked = true;
+            document.getElementById("card-title").innerText = "Sprat: " + pickResult.pickedMesh.name;
         }
     };
 
-    // Zatvaranje kartice na X
     if (closeCardBtn) {
         closeCardBtn.onclick = (e) => {
-            e.stopPropagation(); // Sprečava da klik na X aktivira klik na zgradu ispod
+            e.stopPropagation();
             isCardLocked = false;
             apartmentCard.style.display = "none";
             clearHighlight();
@@ -139,8 +120,4 @@ const createScene = () => {
 
 const scene = createScene();
 engine.runRenderLoop(() => scene.render());
-
-// Responzivnost
-window.addEventListener("resize", () => {
-    engine.resize();
-});
+window.addEventListener("resize", () => engine.resize());
