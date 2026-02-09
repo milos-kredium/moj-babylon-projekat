@@ -15,9 +15,10 @@ const engine = new Engine(canvas, true);
 
 const createScene = () => {
     const scene = new Scene(engine);
-    scene.clearColor = new Color3(0.05, 0.05, 0.05); // Skoro crna pozadina
+    // Tamno siva pozadina da zgrada dođe do izražaja
+    scene.clearColor = new Color3(0.1, 0.1, 0.1);
 
-    // Draco konfiguracija (ako je novi model smanjen)
+    // Draco dekoder (mora da stoji jer je model optimizovan)
     DracoCompression.Configuration = {
         decoder: {
             wasmUrl: "https://preview.babylonjs.com/draco_wasm_wrapper.js",
@@ -25,31 +26,31 @@ const createScene = () => {
         }
     };
 
-    // Osnovna kamera
-    const camera = new ArcRotateCamera("camera", 0, Math.PI / 3, 10, Vector3.Zero(), scene);
+    // Podešavanje kamere
+    const camera = new ArcRotateCamera("camera", Math.PI / 2, Math.PI / 3, 10, Vector3.Zero(), scene);
     camera.attachControl(canvas, true);
 
-    // Svetlo
+    // Svetlo (povećano na 1.2 da zgrada bude jasna)
     const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
-    light.intensity = 1.0;
+    light.intensity = 1.2;
 
-    // UČITAVANJE NOVE ZGRADE
-    // Promenio sam ime u zgrada_nova.glb da nateramo sistem da zaboravi staru
-    SceneLoader.ImportMeshAsync("", "/", "zgrada_nova.glb", scene).then((result) => {
-        console.log("Nova zgrada učitana!");
-        
-        // Automatsko centriranje kamere na novu zgradu
+    // Učitavanje modela
+    SceneLoader.ImportMeshAsync("", "/", "zgrada.glb", scene).then((result) => {
+        // Automatsko fokusiranje na model bez obzira na njegovu veličinu
         const root = result.meshes[0];
         const boundingInfo = root.getHierarchyBoundingVectors();
         const center = Vector3.Center(boundingInfo.min, boundingInfo.max);
         
         camera.setTarget(center);
         
-        // Podesi udaljenost kamere da model stane u ekran
         const size = boundingInfo.max.subtract(boundingInfo.min);
         const maxDim = Math.max(size.x, size.y, size.z);
-        camera.radius = maxDim * 2; 
-    }).catch(err => console.error("Greška:", err));
+        camera.radius = maxDim * 1.5; // Kamera se odmiče dovoljno da vidi celu zgradu
+        
+        console.log("Nova zgrada je uspešno prikazana!");
+    }).catch(err => {
+        console.error("Greška pri učitavanju:", err);
+    });
 
     return scene;
 };
